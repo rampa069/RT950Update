@@ -1,0 +1,101 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RT950Update.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+        x:Class="RT950Update.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="RT-950 UPDATE V02"
+        Width="400" Height="500"
+        CanResize="False">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid Margin="10" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,Auto">
+
+        <!-- File selection row -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+            <TextBox Grid.Column="0"
+                     Text="{Binding FilePath}"
+                     IsReadOnly="True"
+                     Watermark="Select a BTF file..."
+                     Margin="0,0,5,0"/>
+            <Button Grid.Column="1"
+                    Content="..."
+                    Width="35"
+                    Click="BrowseFile_Click"/>
+        </Grid>
+
+        <!-- COM port selection -->
+        <ComboBox Grid.Row="1"
+                  Margin="0,10,0,0"
+                  ItemsSource="{Binding ComPorts}"
+                  SelectedItem="{Binding SelectedComPort}"
+                  PointerPressed="ComPort_PointerPressed"/>
+
+        <!-- Status message -->
+        <TextBox Grid.Row="2"
+                 Margin="0,10,0,0"
+                 Height="200"
+                 Text="{Binding StatusMessage}"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+        <!-- Progress bar -->
+        <ProgressBar Grid.Row="3"
+                     Margin="0,10,0,0"
+                     Height="20"
+                     Minimum="0"
+                     Maximum="100"
+                     Value="{Binding ProgressValue}"/>
+
+        <!-- Buttons row -->
+        <Grid Grid.Row="4"
+              Margin="0,10,0,0"
+              ColumnDefinitions="*,10,*">
+            <Button Grid.Column="0"
+                    Content="Upgrade Mode"
+                    Height="40"
+                    Foreground="Green"
+                    FontWeight="Bold"
+                    Command="{Binding UpgradeModeCommand}"
+                    IsEnabled="{Binding !IsDownloading}"/>
+            <Button Grid.Column="2"
+                    Content="Flashing Mode"
+                    Height="40"
+                    Foreground="Red"
+                    FontWeight="Bold"
+                    Command="{Binding FlashingModeCommand}"
+                    IsEnabled="{Binding !IsDownloading}"/>
+        </Grid>
+
+        <!-- Instructions for Upgrade Mode -->
+        <Border Grid.Row="5"
+                Margin="0,10,0,0"
+                Background="LightGreen"
+                CornerRadius="4"
+                Padding="8">
+            <TextBlock Text="{Binding UpgradeModeInstructions}"
+                       TextWrapping="Wrap"
+                       FontSize="11"/>
+        </Border>
+
+        <!-- Instructions for Flashing Mode -->
+        <Border Grid.Row="6"
+                Margin="0,5,0,0"
+                Background="LightCoral"
+                CornerRadius="4"
+                Padding="8">
+            <TextBlock Text="{Binding FlashingModeInstructions}"
+                       TextWrapping="Wrap"
+                       FontSize="11"/>
+        </Border>
+
+    </Grid>
+
+</Window>
